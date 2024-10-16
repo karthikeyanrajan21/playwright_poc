@@ -15,31 +15,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js environment (version 22.9.0 as per your system)
+      # Step 2: Set up Node.js environment (version 22.x)
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22.x'  # Match the node version you are using
 
-      # Step 3: Install npm dependencies
+      # Step 3: Install npm dependencies including Playwright
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Fix permission issues before installing Playwright
-      - name: Fix permissions
-        run: |
-          sudo chmod -R 777 /home/runner/.npm
-          sudo chmod +x /usr/local/bin/npx
-
-      # Step 5: Install Playwright browsers
+      # Step 4: Install Playwright browsers
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install
 
-      # Step 6: Run Playwright tests
+      # Step 5: Run Playwright tests
       - name: Run Playwright tests
         run: npx playwright test
 
-      # Step 7: Upload Playwright report to GitHub as an artifact
+      # Step 6: Upload Playwright report to GitHub as an artifact
       - name: Upload Playwright report
         if: always()  # Always run this step even if tests fail
         uses: actions/upload-artifact@v3
@@ -47,7 +41,7 @@ jobs:
           name: playwright-report
           path: playwright-report
 
-      # Step 8: Show Playwright report in the console
+      # Step 7: Show Playwright report in the console
       - name: Show Playwright report
         if: always()
         run: npx playwright show-report
