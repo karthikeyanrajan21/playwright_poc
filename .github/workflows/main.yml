@@ -33,9 +33,14 @@ jobs:
       - name: Install Playwright browsers
         run: npm exec playwright install
 
-      # Step 6: Run Playwright tests
+      # Step 6: Run Playwright tests with tracing enabled
       - name: Run Playwright tests
-        run: npm exec playwright test
+        run: |
+          npx playwright test --trace on-first-retry
+
+      # Step 6: Run Playwright tests
+     # - name: Run Playwright tests
+     #   run: npm exec playwright test
 
       # Step 7: Upload Playwright report to GitHub as an artifact
       - name: Upload Playwright report
