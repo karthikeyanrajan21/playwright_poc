@@ -21,19 +21,25 @@ jobs:
         with:
           node-version: '22.x'  # Match the node version you are using
 
-      # Step 3: Install npm dependencies (replace npm ci with npm install)
+      # Step 3: Install npm dependencies
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Install Playwright browsers
+      # Step 4: Fix permission issues before installing Playwright
+      - name: Fix permissions
+        run: |
+          sudo chmod -R 777 /home/runner/.npm
+          sudo chmod +x /usr/local/bin/npx
+
+      # Step 5: Install Playwright browsers
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      # Step 5: Run Playwright tests
+      # Step 6: Run Playwright tests
       - name: Run Playwright tests
         run: npx playwright test
 
-      # Step 6: Upload Playwright report to GitHub as an artifact
+      # Step 7: Upload Playwright report to GitHub as an artifact
       - name: Upload Playwright report
         if: always()  # Always run this step even if tests fail
         uses: actions/upload-artifact@v3
@@ -41,7 +47,7 @@ jobs:
           name: playwright-report
           path: playwright-report
 
-      # Step 7: Show Playwright report in the console
+      # Step 8: Show Playwright report in the console
       - name: Show Playwright report
         if: always()
         run: npx playwright show-report
